@@ -4,9 +4,9 @@ use adapters::SyntaxHighlighterAdapter;
 use regex::Regex;
 use std::collections::HashMap;
 use strings::{build_opening_tag, extract_attributes_from_tag};
-use syntect::highlighting::ThemeSet;
+pub use syntect::highlighting::ThemeSet;
 use syntect::html::highlighted_html_for_string;
-use syntect::parsing::SyntaxSet;
+pub use syntect::parsing::SyntaxSet;
 
 #[derive(Debug)]
 /// Syntect syntax highlighter plugin.
@@ -24,6 +24,21 @@ impl<'a> SyntectAdapter<'a> {
             syntax_set: SyntaxSet::load_defaults_newlines(),
             theme_set: ThemeSet::load_defaults(),
         }
+    }
+
+    /// Set the theme
+    pub fn theme(self, theme: &'a str) -> Self {
+        Self { theme, ..self }
+    }
+
+    /// Set the syntax set
+    pub fn syntax_set(self, syntax_set: SyntaxSet) -> Self {
+        Self { syntax_set, ..self }
+    }
+
+    /// Set the theme set
+    pub fn theme_set(self, theme_set: ThemeSet) -> Self {
+        Self { theme_set, ..self }
     }
 
     fn gen_empty_block(&self) -> String {
